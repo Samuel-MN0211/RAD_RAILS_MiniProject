@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  data_inicio: 2025-06-28
+  data_termino: 2025-06-28
+  valor_bolsa: 9.99
+  user: one
+  oferta: one
+
+two:
+  data_inicio: 2025-06-28
+  data_termino: 2025-06-28
+  valor_bolsa: 9.99
+  user: two
+  oferta: two

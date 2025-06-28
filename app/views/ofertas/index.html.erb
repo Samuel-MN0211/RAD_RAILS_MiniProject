@@ -1,0 +1,19 @@
+<h1>Ofertas#index</h1>
+<p>Find me in app/views/ofertas/index.html.erb</p>
+
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-bold">Ofertas de Estágio</h1>
+  <% if current_user.empresa? %>
+    <%= link_to "Nova Oferta", new_oferta_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  <% end %>
+</div>
+
+<div class="space-y-4">
+  <% @ofertas.each do |oferta| %>
+    <div class="p-4 border rounded-lg">
+      <h2 class="text-xl font-semibold"><%= link_to oferta.titulo, oferta %></h2>
+      <p class="text-gray-600"><%= truncate(oferta.descricao, length: 150) %></p>
+      <span class="text-sm font-medium bg-gray-200 text-gray-800 py-1 px-2 rounded"><%= oferta.status.humanize %></span>
+    </div>
+  <% end %>
+</div>

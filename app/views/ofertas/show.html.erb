@@ -1,0 +1,42 @@
+<h1>Ofertas#show</h1>
+<p>Find me in app/views/ofertas/show.html.erb</p>
+<h1 class="text-3xl font-bold"><%= @oferta.titulo %></h1>
+<p class="text-lg text-gray-700 mt-2"><%= @oferta.user.email %> (<%= @oferta.user.role.humanize %>)</p>
+<span class="text-sm font-medium bg-gray-200 text-gray-800 py-1 px-2 rounded"><%= @oferta.status.humanize %></span>
+
+<div class="mt-6 prose max-w-none">
+  <%= @oferta.descricao %>
+  <h3>Atividade Principal</h3>
+  <p><%= @oferta.atividade_principal %></p>
+  <h3>Requisitos</h3>
+  <p><%= @oferta.pre_requisitos %></p>
+  <h3>Habilidades Necessárias</h3>
+  <p><%= @oferta.habilidades_necessarias %></p>
+</div>
+
+<%# Lógica para o Aluno se candidatar %>
+<% if current_user.aluno? && @oferta.disponivel? %>
+  <div class="mt-6">
+    <% if @oferta.candidatos.include?(current_user) %>
+      <p class="text-green-600 font-bold">Você já se candidatou para esta vaga.</p>
+    <% else %>
+      <%= button_to "Candidatar-se a esta Vaga", oferta_candidaturas_path(@oferta), method: :post, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+    <% end %>
+  </div>
+<% end %>
+
+<%# Lógica para a Empresa ver os candidatos (UC05) %>
+<% if current_user.empresa? && @oferta.user == current_user %>
+  <div class="mt-8">
+    <h2 class="text-2xl font-bold">Candidatos para esta vaga</h2>
+    <% if @oferta.candidatos.any? %>
+      <ul class="list-disc pl-5 mt-4">
+        <% @oferta.candidatos.each do |candidato| %>
+          <li><%= candidato.email %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>Ainda não há candidatos para esta vaga.</p>
+    <% end %>
+  </div>
+<% end %>

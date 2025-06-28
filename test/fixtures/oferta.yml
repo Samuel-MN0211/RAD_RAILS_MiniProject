@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  titulo: MyString
+  descricao: MyText
+  atividade_principal: MyString
+  ch_semanal: 1
+  valor_pago: 9.99
+  vale_transporte: 9.99
+  pre_requisitos: MyText
+  habilidades_necessarias: MyText
+  habilidades_desejaveis: MyText
+  status: 1
+  user: one
+
+two:
+  titulo: MyString
+  descricao: MyText
+  atividade_principal: MyString
+  ch_semanal: 1
+  valor_pago: 9.99
+  vale_transporte: 9.99
+  pre_requisitos: MyText
+  habilidades_necessarias: MyText
+  habilidades_desejaveis: MyText
+  status: 1
+  user: two

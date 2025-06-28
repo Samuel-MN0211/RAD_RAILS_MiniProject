@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    # Este comando é o coração da solução. Ele garante que as gems sejam instaladas
+    # antes de iniciar o servidor. É executado toda vez que o container sobe.
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bin/rails s -b '0.0.0.0'"
+
+    volumes:
+      # Monta sua pasta local para dentro do container.
+      - .:/rails
+
+    ports:
+      - "3000:3000"

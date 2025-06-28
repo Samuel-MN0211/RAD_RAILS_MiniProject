@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <title><%= content_for(:title) || "Myapp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Sistema de Estágios</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+           <% if user_signed_in? %>
+              <% if current_user.aluno? %>
+                <li class="nav-item">
+                  <%= link_to "Ver Ofertas", ofertas_path, class: "nav-link" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "Minhas Candidaturas", dashboard_path, class: "nav-link" %>
+                </li>
+              <% elsif current_user.empresa? %>
+                 <li class="nav-item">
+                  <%= link_to "Minhas Ofertas", ofertas_path, class: "nav-link" %>
+                </li>
+              <% end %>
+           <% end %>
+        </ul>
+        <ul class="navbar-nav">
+          <% if user_signed_in? %>
+            <li class="nav-item">
+              <span class="navbar-text me-3">
+                Olá, <%= current_user.email %> (<%= current_user.role %>)
+              </span>
+            </li>
+            <li class="nav-item">
+              <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to "Entrar", new_user_session_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Cadastrar", new_user_registration_path, class: "nav-link" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <% if notice %>
+      <p class="alert alert-success"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert alert-danger"><%= alert %></p>
+    <% end %>
+    <%= yield %>
+  </main>
+</body>
+</html>

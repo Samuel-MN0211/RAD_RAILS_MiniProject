@@ -1,0 +1,51 @@
+<%= form_with(model: oferta, class: "space-y-4") do |form| %>
+    <% if oferta.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(oferta.errors.count, "error") %> proibiu esta oferta de ser salva:</h2>
+        <ul>
+          <% oferta.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :titulo, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :titulo, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :descricao, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_area :descricao, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+     <div>
+      <%= form.label :atividade_principal, "Atividade Principal do Estágio" %>
+      <%= form.text_field :atividade_principal, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :ch_semanal, "Carga Horária Semanal" %>
+      <%= form.number_field :ch_semanal, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+     <div>
+      <%= form.label :valor_pago, "Valor da Bolsa (se houver)" %>
+      <%= form.text_field :valor_pago, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+     <div>
+      <%= form.label :vale_transporte, "Vale Transporte (se houver)" %>
+      <%= form.text_field :vale_transporte, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :pre_requisitos, "Pré-requisitos do Candidato" %>
+      <%= form.text_area :pre_requisitos, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :habilidades_necessarias, "Habilidades Técnicas Necessárias" %>
+      <%= form.text_area :habilidades_necessarias, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.label :habilidades_desejaveis, "Habilidades Técnicas Desejáveis" %>
+      <%= form.text_area :habilidades_desejaveis, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= form.submit "Salvar Oferta", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+    </div>
+  <% end %>

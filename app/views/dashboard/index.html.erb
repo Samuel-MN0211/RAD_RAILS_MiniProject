@@ -1,0 +1,14 @@
+<h1>Dashboard#index</h1>
+<p>Find me in app/views/dashboard/index.html.erb</p>
+<h1 class="text-2xl font-bold mb-4">Minhas Candidaturas</h1>
+
+<div class="space-y-4">
+  <% @candidaturas.each do |candidatura| %>
+    <div class="p-4 border rounded-lg">
+      <h2 class="text-xl font-semibold"><%= link_to candidatura.oferta.titulo, candidatura.oferta %></h2>
+      <p class="text-gray-600">Empresa: <%= candidatura.oferta.user.email %></p>
+      <p class="text-sm text-gray-500">Candidatou-se em: <%= l candidatura.created_at, format: :long %></p>
+      <span class="text-sm font-medium bg-yellow-200 text-yellow-800 py-1 px-2 rounded"><%= candidatura.status.humanize %></span>
+    </div>
+  <% end %>
+</div>

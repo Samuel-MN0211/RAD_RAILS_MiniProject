@@ -1,0 +1,88 @@
+<h2>Cadastro</h2>
+
+<%# O form_for agora engloba tudo e é controlado pelo Stimulus %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { controller: "registration-form" }) do |f| %>
+  
+
+  <%# Dropdown para selecionar o tipo de usuário %>
+  <div class="mb-3">
+    <%= f.label :role, "Eu sou...", class: "form-label" %>
+    <%# O data-action chama o método 'toggleFields' do nosso controller sempre que o dropdown muda %>
+    <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, { include_blank: 'Selecione um tipo de conta' }, { class: "form-select", data: { action: "change->registration-form#toggleFields" } } %>
+    <% if resource.errors.include?(:role) %>
+      <div class="text-danger small"><%= resource.errors.full_messages_for(:role).join(", ") %></div>
+    <% end %>
+  </div>
+
+  <%# --- SEÇÃO DE CAMPOS PARA ALUNO --- %>
+  <%# Esta div é um "alvo" do Stimulus e começa escondida %>
+  <div data-registration-form-target="alunoFields" class="d-none">
+    <div class="mb-3"><%= f.label :nome, class: "form-label" %><br /><%= f.text_field :nome, class: "form-control" %>
+      <% if resource.errors.include?(:nome) %><div class="text-danger small"><%= resource.errors.full_messages_for(:nome).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :cpf, class: "form-label" %><br /><%= f.telephone_field :cpf, class: "form-control" %>
+      <% if resource.errors.include?(:cpf) %><div class="text-danger small"><%= resource.errors.full_messages_for(:cpf).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :data_nascimento, class: "form-label" %><br /><%= f.date_field :data_nascimento, class: "form-control" %>
+      <% if resource.errors.include?(:data_nascimento) %><div class="text-danger small"><%= resource.errors.full_messages_for(:data_nascimento).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Selecione suas habilidades</label>
+      <div class="border p-2" style="height: 200px; overflow-y: scroll;">
+          <%= f.collection_check_boxes :habilidade_ids, Habilidade.all, :id, :nome do |b| %>
+            <div class="form-check"><%= b.check_box(class: "form-check-input") %><%= b.label(class: "form-check-label") %></div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# --- SEÇÃO DE CAMPOS PARA EMPRESA --- %>
+  <div data-registration-form-target="empresaFields" class="d-none">
+    <div class="mb-3"><%= f.label :nome, "Nome da Empresa", class: "form-label" %><br /><%= f.text_field :nome, class: "form-control" %>
+      <% if resource.errors.include?(:nome) %><div class="text-danger small"><%= resource.errors.full_messages_for(:nome).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :cnpj, "CNPJ da Empresa", class: "form-label" %><br /><%= f.telephone_field :cnpj, class: "form-control" %>
+      <% if resource.errors.include?(:cnpj) %><div class="text-danger small"><%= resource.errors.full_messages_for(:cnpj).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :endereco, "Endereço da Empresa", class: "form-label" %><br /><%= f.text_area :endereco, class: "form-control" %>
+      <% if resource.errors.include?(:endereco) %><div class="text-danger small"><%= resource.errors.full_messages_for(:endereco).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :telefone, "Telefone de Contato", class: "form-label" %><br /><%= f.telephone_field :telefone, class: "form-control" %>
+      <% if resource.errors.include?(:telefone) %><div class="text-danger small"><%= resource.errors.full_messages_for(:telefone).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :pessoa_contato, "Pessoa de Contato", class: "form-label" %><br /><%= f.text_field :pessoa_contato, class: "form-control" %>
+      <% if resource.errors.include?(:pessoa_contato) %><div class="text-danger small"><%= resource.errors.full_messages_for(:pessoa_contato).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :atividade_principal, class: "form-label" %><br /><%= f.text_field :atividade_principal, class: "form-control" %>
+      <% if resource.errors.include?(:atividade_principal) %><div class="text-danger small"><%= resource.errors.full_messages_for(:atividade_principal).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :url_empresa, "URL da Empresa", class: "form-label" %><br /><%= f.text_field :url_empresa, class: "form-control" %></div>
+  </div>
+
+  <%# --- SEÇÃO DE CAMPOS PARA COORDENADOR --- %>
+  <div data-registration-form-target="coordenadorFields" class="d-none">
+    <div class="mb-3"><%= f.label :nome, class: "form-label" %><br /><%= f.text_field :nome, class: "form-control" %>
+      <% if resource.errors.include?(:nome) %><div class="text-danger small"><%= resource.errors.full_messages_for(:nome).join(", ") %></div><% end %>
+    </div>
+    <div class="mb-3"><%= f.label :matricula, "Matrícula", class: "form-label" %><br /><%= f.telephone_field :matricula, class: "form-control" %>
+      <% if resource.errors.include?(:matricula) %><div class="text-danger small"><%= resource.errors.full_messages_for(:matricula).join(", ") %></div><% end %>
+    </div>
+  </div>
+
+  <%# --- CAMPOS COMUNS A TODOS (E-mail e Senha) --- %>
+  <hr class="my-3">
+  <div class="mb-3"><%= f.label :email, class: "form-label" %><br /><%= f.email_field :email, autocomplete: "email", class: "form-control" %>
+    <% if resource.errors.include?(:email) %><div class="text-danger small"><%= resource.errors.full_messages_for(:email).join(", ") %></div><% end %>
+  </div>
+  <div class="mb-3"><%= f.label :password, "Senha", class: "form-label" %><% if @minimum_password_length %><em>(<%= @minimum_password_length %> caracteres no mínimo)</em><% end %><br /><%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+    <% if resource.errors.include?(:password) %><div class="text-danger small"><%= resource.errors.full_messages_for(:password).join(", ") %></div><% end %>
+  </div>
+  <div class="mb-3"><%= f.label :password_confirmation, "Confirmação da Senha", class: "form-label" %><br /><%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %></div>
+
+  <div class="actions mt-4">
+    <%= f.submit "Cadastrar", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<hr class="my-4">
+<%= render "devise/shared/links" %>
