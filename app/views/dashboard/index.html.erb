@@ -1,14 +1,40 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
-<h1 class="text-2xl font-bold mb-4">Minhas Candidaturas</h1>
+<h1 class="h2 mb-4">Minhas Candidaturas</h1>
 
-<div class="space-y-4">
+<div class="list-group">
   <% @candidaturas.each do |candidatura| %>
-    <div class="p-4 border rounded-lg">
-      <h2 class="text-xl font-semibold"><%= link_to candidatura.oferta.titulo, candidatura.oferta %></h2>
-      <p class="text-gray-600">Empresa: <%= candidatura.oferta.user.email %></p>
-      <p class="text-sm text-gray-500">Candidatou-se em: <%= l candidatura.created_at, format: :long %></p>
-      <span class="text-sm font-medium bg-yellow-200 text-yellow-800 py-1 px-2 rounded"><%= candidatura.status.humanize %></span>
+    <% oferta = candidatura.oferta %>
+    <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1"><%= link_to oferta.titulo, oferta_path(oferta) %></h5>
+        <small>
+            <% if candidatura.status %>
+              <span class="badge bg-info"><%= candidatura.status.humanize %></span>
+            <% else %>
+              <span class="badge bg-dark">Indefinido</span>
+            <% end %>
+        </small>
+      </div>
+
+      <p class="mb-1 text-muted">Empresa: <%= oferta.user.nome %></p>
+      
+      <div class="card my-2">
+        <div class="card-body">
+          <p class="mb-1"><strong>Atividade Principal:</strong> <%= oferta.atividade_principal %></p>
+          <p class="mb-1"><strong>Bolsa:</strong> <%= number_to_currency(oferta.valor_pago) %></p>
+          <p class="mb-1"><strong>Carga Horária Semanal:</strong> <%= oferta.ch_semanal %> horas</p>
+        </div>
+      </div>
+      
+       <small class="text-muted">Candidatura enviada em: <%= l candidatura.created_at, format: :short %></small>
     </div>
   <% end %>
+
+  <%# CORREÇÃO AQUI: Ajusta a mensagem para quando não há candidaturas %>
+  <% if @candidaturas.empty? %>
+    <p>Você não possui nenhuma candidatura.</p>
+  <% end %>
+</div>
+
+<div class="mt-4 d-flex justify-content-center">
+  <%== pagy_bootstrap_nav(@pagy) if @pagy && @pagy.pages > 1 %>
 </div>

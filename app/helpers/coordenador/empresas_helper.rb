@@ -1,0 +1,2 @@
+module Coordenador::EmpresasHelper
+end

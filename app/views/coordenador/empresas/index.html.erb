@@ -1,0 +1,23 @@
+<h1 class="h2 mb-4">Empresas Cadastradas</h1>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Nome da Empresa</th>
+      <th>CNPJ</th>
+      <th>Email</th>
+      <th>Contato</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @empresas.each do |empresa| %>
+      <tr>
+        <td><%= empresa.nome %></td>
+        <td><%= empresa.cnpj %></td>
+        <td><%= empresa.email %></td>
+        <td><%= empresa.pessoa_contato %></td>
+        <td><%= link_to "Editar", edit_coordenador_empresa_path(empresa), class: "btn btn-secondary btn-sm" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

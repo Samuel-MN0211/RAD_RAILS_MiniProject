@@ -1,0 +1,31 @@
+<h1 class="h2 mb-4">Converter Oferta em Estágio</h1>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Oferta: <%= @oferta.titulo %></h5>
+    <h6 class="card-subtitle mb-2 text-muted">Aluno Selecionado: <%= @aluno.nome %></h6>
+  </div>
+</div>
+
+<%= form_with(model: [@oferta, @estagio], class: "card p-4") do |form| %>
+  <%= form.hidden_field :user_id, value: @aluno.id %>
+
+  <div class="mb-3">
+    <%= form.label :data_inicio, class: "form-label" %>
+    <%= form.date_field :data_inicio, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :data_termino, class: "form-label" %>
+    <%= form.date_field :data_termino, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :valor_bolsa, "Valor do Estágio (R$)", class: "form-label" %>
+    <%= form.number_field :valor_bolsa, step: 0.01, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Confirmar Estágio", class: "btn btn-success" %>
+  </div>
+<% end %>

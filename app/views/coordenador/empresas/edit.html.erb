@@ -1,0 +1,16 @@
+<h1 class="h2 mb-4">Editando Empresa: <%= @empresa.nome %></h1>
+
+<%= form_with(model: @user, url: coordenador_empresa_path(@user), method: :patch) do |form| %>
+  <div class="mb-3">
+    <%= form.label :nome, "Nome da Empresa", class: "form-label" %>
+    <%= form.text_field :nome, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :cnpj, "CNPJ", class: "form-label" %>
+    <%= form.text_field :cnpj, class: "form-control" %>
+  </div>
+  <%# Adicione outros campos conforme necessário %>
+
+  <%= form.submit "Salvar Alterações", class: "btn btn-primary" %>
+  <%= link_to "Cancelar", coordenador_empresas_path, class: "btn btn-secondary" %>
+<% end %>

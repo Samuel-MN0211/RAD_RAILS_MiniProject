@@ -1,6 +1,6 @@
 class CreateOferta < ActiveRecord::Migration[8.0]
   def change
-    create_table :oferta do |t|
+    create_table :ofertas do |t|
       t.string :titulo
       t.text :descricao
       t.string :atividade_principal

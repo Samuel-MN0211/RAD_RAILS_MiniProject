@@ -1,42 +1,56 @@
-<h1>Ofertas#show</h1>
-<p>Find me in app/views/ofertas/show.html.erb</p>
-<h1 class="text-3xl font-bold"><%= @oferta.titulo %></h1>
-<p class="text-lg text-gray-700 mt-2"><%= @oferta.user.email %> (<%= @oferta.user.role.humanize %>)</p>
-<span class="text-sm font-medium bg-gray-200 text-gray-800 py-1 px-2 rounded"><%= @oferta.status.humanize %></span>
+<h1 class="display-5"><%= @oferta.titulo %></h1>
+<p class="text-muted">Proposta por: <%= @oferta.user.nome %></p>
+<span class="badge <%= { proposta: 'bg-warning text-dark', aprovada: 'bg-success', reprovada: 'bg-danger', cancelada: 'bg-secondary', convertida: 'bg-info' }[@oferta.status.to_sym] %>">
+  Status: <%= @oferta.status.humanize %>
+</span>
 
-<div class="mt-6 prose max-w-none">
-  <%= @oferta.descricao %>
-  <h3>Atividade Principal</h3>
+<div class="mt-4">
+  <h4>Descrição</h4>
+  <p><%= @oferta.descricao %></p>
+  
+  <h4>Atividade Principal</h4>
   <p><%= @oferta.atividade_principal %></p>
-  <h3>Requisitos</h3>
+  
+  <h4>Requisitos</h4>
   <p><%= @oferta.pre_requisitos %></p>
-  <h3>Habilidades Necessárias</h3>
-  <p><%= @oferta.habilidades_necessarias %></p>
 </div>
 
-<%# Lógica para o Aluno se candidatar %>
-<% if current_user.aluno? && @oferta.disponivel? %>
-  <div class="mt-6">
-    <% if @oferta.candidatos.include?(current_user) %>
-      <p class="text-green-600 font-bold">Você já se candidatou para esta vaga.</p>
+<%# --- LÓGICA DO BOTÃO DE CANDIDATURA ATUALIZADA --- %>
+<%# Primeiro, verificamos se o usuário tem permissão para se candidatar %>
+<% if can? :create, Candidatura.new(oferta: @oferta) %>
+  <div class="mt-4">
+    <%# Depois, verificamos se o aluno atual já tem uma candidatura para esta oferta específica %>
+    <% if current_user.candidaturas.exists?(oferta_id: @oferta.id) %>
+      <%# Se já se candidatou, mostra o botão vermelho e desabilitado %>
+      <button class="btn btn-danger" disabled>
+        Você já se candidatou a esta vaga
+      </button>
     <% else %>
-      <%= button_to "Candidatar-se a esta Vaga", oferta_candidaturas_path(@oferta), method: :post, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+      <%# Se não, mostra o botão verde para se candidatar %>
+      <%= button_to "Candidatar-se a esta Vaga", oferta_candidaturas_path(@oferta), method: :post, class: "btn btn-success" %>
     <% end %>
   </div>
 <% end %>
 
-<%# Lógica para a Empresa ver os candidatos (UC05) %>
-<% if current_user.empresa? && @oferta.user == current_user %>
-  <div class="mt-8">
-    <h2 class="text-2xl font-bold">Candidatos para esta vaga</h2>
-    <% if @oferta.candidatos.any? %>
-      <ul class="list-disc pl-5 mt-4">
-        <% @oferta.candidatos.each do |candidato| %>
-          <li><%= candidato.email %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>Ainda não há candidatos para esta vaga.</p>
-    <% end %>
-  </div>
+
+<%# Seção para a empresa ver candidatos e converter para estágio %>
+<% if @oferta.aprovada? && can?(:manage, @oferta) %>
+  <hr class="my-4">
+  <h3 class="h4">Candidatos para esta vaga</h3>
+  <% if @oferta.candidatos.any? %>
+    <ul class="list-group">
+      <% @oferta.candidatos.each do |candidato| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            <strong><%= candidato.nome %></strong> (<%= candidato.email %>)
+          </span>
+          <% if can? :create, Estagio %>
+            <%= link_to "Selecionar para Estágio", new_oferta_estagio_path(@oferta, aluno_id: candidato.id), class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Ainda não há candidatos para esta vaga.</p>
+  <% end %>
 <% end %>

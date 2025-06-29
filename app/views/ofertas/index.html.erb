@@ -1,19 +1,53 @@
-<h1>Ofertas#index</h1>
-<p>Find me in app/views/ofertas/index.html.erb</p>
-
-<div class="flex justify-between items-center mb-4">
-  <h1 class="text-2xl font-bold">Ofertas de Estágio</h1>
-  <% if current_user.empresa? %>
-    <%= link_to "Nova Oferta", new_oferta_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h2"><%= current_user&.empresa? ? "Minhas Propostas e Ofertas" : "Ofertas de Estágio Disponíveis" %></h1>
+  <% if can? :create, Oferta %>
+    <%= link_to "Criar Nova Proposta", new_oferta_path, class: "btn btn-primary" %>
   <% end %>
 </div>
 
-<div class="space-y-4">
+<div class="list-group">
   <% @ofertas.each do |oferta| %>
-    <div class="p-4 border rounded-lg">
-      <h2 class="text-xl font-semibold"><%= link_to oferta.titulo, oferta %></h2>
-      <p class="text-gray-600"><%= truncate(oferta.descricao, length: 150) %></p>
-      <span class="text-sm font-medium bg-gray-200 text-gray-800 py-1 px-2 rounded"><%= oferta.status.humanize %></span>
+    <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1"><%= oferta.titulo %></h5>
+        <small>
+          <% status_class = { proposta: 'bg-warning text-dark', aprovada: 'bg-success', reprovada: 'bg-danger', cancelada: 'bg-secondary', convertida: 'bg-info' } %>
+          <% if oferta.status %>
+            <span class="badge <%= status_class[oferta.status.to_sym] %>"><%= oferta.status.humanize %></span>
+          <% else %>
+            <span class="badge bg-dark">Indefinido</span>
+          <% end %>
+        </small>
+      </div>
+
+      <p class="mb-1 text-muted">Empresa: <%= oferta.user.nome %></p>
+      
+      <div class="card my-2">
+        <div class="card-body">
+          <p><strong>Atividade Principal:</strong> <%= oferta.atividade_principal %></p>
+          <p><strong>Carga Horária Semanal:</strong> <%= oferta.ch_semanal %> horas</p>
+          <p><strong>Bolsa:</strong> <%= number_to_currency(oferta.valor_pago) %></p>
+          <p><strong>Vale Transporte:</strong> <%= number_to_currency(oferta.vale_transporte) %></p>
+          <p><strong>Pré-requisitos:</strong> <%= oferta.pre_requisitos %></p>
+        </div>
+      </div>
+      
+      <div class="mt-2">
+        <%= link_to "Ver Mais Detalhes", oferta_path(oferta), class: "btn btn-outline-secondary btn-sm" %>
+        <% if can? :cancelar, oferta %>
+          <%= button_to "Cancelar", oferta_path(oferta), method: :delete, 
+                data: { turbo_confirm: "Tem certeza que deseja cancelar esta proposta/oferta? Esta ação não pode ser desfeita." },
+                class: "btn btn-outline-danger btn-sm" %>
+        <% end %>
+      </div>
     </div>
   <% end %>
+
+  <% if @ofertas.empty? %>
+    <p>Nenhuma oferta encontrada.</p>
+  <% end %>
+</div>
+
+<div class="mt-4 d-flex justify-content-center">
+  <%== pagy_bootstrap_nav(@pagy) if @pagy && @pagy.pages > 1 %>
 </div>

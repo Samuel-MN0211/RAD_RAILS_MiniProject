@@ -1,0 +1,2 @@
+module Coordenador::AlunosHelper
+end

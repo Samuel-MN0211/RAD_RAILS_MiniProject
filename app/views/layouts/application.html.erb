@@ -31,22 +31,31 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-           <% if user_signed_in? %>
-              <% if current_user.aluno? %>
-                <li class="nav-item">
-                  <%= link_to "Ver Ofertas", ofertas_path, class: "nav-link" %>
-                </li>
-                <li class="nav-item">
-                  <%= link_to "Minhas Candidaturas", dashboard_path, class: "nav-link" %>
-                </li>
-              <% elsif current_user.empresa? %>
-                 <li class="nav-item">
-                  <%= link_to "Minhas Ofertas", ofertas_path, class: "nav-link" %>
-                </li>
-              <% end %>
-           <% end %>
-        </ul>
+      <%# app/views/layouts/application.html.erb %>
+      <ul class="navbar-nav me-auto">
+        <% if user_signed_in? %>
+          <%# Links para Aluno %>
+          <% if current_user.aluno? %>
+            <li class="nav-item"><%= link_to "Ver Ofertas", ofertas_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Minhas Candidaturas", dashboard_path, class: "nav-link" %></li>
+          <% end %>
+      
+          <%# Links para Empresa %>
+          <% if current_user.empresa? %>
+             <li class="nav-item"><%= link_to "Minhas Propostas/Ofertas", ofertas_path, class: "nav-link" %></li>
+          <% end %>
+      
+          <%# Links para Coordenador %>
+          <% if current_user.coordenador? %>
+            <li class="nav-item"><%= link_to "Controle de Estágios", coordenador_ofertas_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Empresas", coordenador_empresas_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Alunos", coordenador_alunos_path, class: "nav-link" %></li>
+          <% end %>
+      
+        <% else %>
+            <li class="nav-item"><%= link_to "Ver Ofertas", ofertas_path, class: "nav-link" %></li>
+        <% end %>
+      </ul>
         <ul class="navbar-nav">
           <% if user_signed_in? %>
             <li class="nav-item">

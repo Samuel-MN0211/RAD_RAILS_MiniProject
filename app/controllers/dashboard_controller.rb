@@ -3,6 +3,7 @@ class DashboardController < ApplicationController
 
   # GET /dashboard 
   def index
-    @candidaturas = current_user.candidaturas.includes(:oferta).order(created_at: :desc)
+    @candidaturas_raw = current_user.candidaturas.includes(:oferta).order(created_at: :desc)
+    @pagy, @candidaturas = pagy(@candidaturas_raw)
   end
 end

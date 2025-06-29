@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_28_222130) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_29_024559) do
   create_table "aluno_habilidades", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "habilidade_id", null: false
@@ -65,6 +65,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_222130) do
     t.index ["user_id"], name: "index_oferta_on_user_id"
   end
 
+  create_table "ofertas", force: :cascade do |t|
+    t.string "titulo"
+    t.text "descricao"
+    t.string "atividade_principal"
+    t.integer "ch_semanal"
+    t.decimal "valor_pago"
+    t.decimal "vale_transporte"
+    t.text "pre_requisitos"
+    t.text "habilidades_necessarias"
+    t.text "habilidades_desejaveis"
+    t.integer "status"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_ofertas_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -98,4 +115,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_222130) do
   add_foreign_key "estagios", "oferta", column: "oferta_id"
   add_foreign_key "estagios", "users"
   add_foreign_key "oferta", "users"
+  add_foreign_key "ofertas", "users"
 end

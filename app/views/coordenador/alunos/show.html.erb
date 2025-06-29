@@ -1,0 +1,22 @@
+<h1 class="h2 mb-4">Detalhes do Aluno: <%= @user.nome %></h1>
+    <p><strong>Nome:</strong> <%= @user.nome %></p>
+    <p><strong>Email:</strong> <%= @user.email %></p>
+    <p><strong>CPF:</strong> <%= @user.cpf %></p>
+
+    <hr class="my-4">
+    
+    <h3 class="h4">Candidaturas Realizadas</h3>
+    <% if @user.candidaturas.any? %>
+      <ul class="list-group">
+        <% @user.candidaturas.each do |candidatura| %>
+          <li class="list-group-item">
+            <strong><%= candidatura.oferta.titulo %></strong>
+            <span class="badge bg-info"><%= candidatura.status.humanize %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>Este aluno ainda não se candidatou a nenhuma vaga.</p>
+    <% end %>
+    
+    <%= link_to "Voltar para a lista de alunos", coordenador_alunos_path, class: "btn btn-secondary mt-4" %>

@@ -1,0 +1,23 @@
+<h1 class="h2 mb-4">Alunos Cadastrados</h1>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Nome do Aluno</th>
+      <th>Email</th>
+      <th>CPF</th>
+      <th>Candidaturas</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @alunos.each do |aluno| %>
+      <tr>
+        <td><%= aluno.nome %></td>
+        <td><%= aluno.email %></td>
+        <td><%= aluno.cpf %></td>
+        <td><%= aluno.candidaturas.count %></td>
+        <td><%= link_to "Ver Detalhes", coordenador_aluno_path(aluno), class: "btn btn-secondary btn-sm" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
