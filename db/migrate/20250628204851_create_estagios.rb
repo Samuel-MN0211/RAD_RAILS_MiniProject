@@ -5,7 +5,7 @@ class CreateEstagios < ActiveRecord::Migration[8.0]
       t.date :data_termino
       t.decimal :valor_bolsa
       t.references :user, null: false, foreign_key: true
-      t.references :oferta, null: false, foreign_key: true
+      t.references :oferta, null: false, foreign_key: { to_table: :ofertas } 
 
       t.timestamps
     end

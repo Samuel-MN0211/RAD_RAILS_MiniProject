@@ -114,6 +114,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_024559) do
   add_foreign_key "candidaturas", "users"
   add_foreign_key "estagios", "oferta", column: "oferta_id"
   add_foreign_key "estagios", "users"
-  add_foreign_key "oferta", "users"
   add_foreign_key "ofertas", "users"
 end
