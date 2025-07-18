@@ -29,6 +29,7 @@ class Ability
 
     if user.coordenador?
       can :manage, :all
+      cannot :create, Candidatura
     end
   end
 end
