@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_29_024559) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_26_152538) do
   create_table "aluno_habilidades", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "habilidade_id", null: false
@@ -30,16 +30,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_024559) do
     t.index ["user_id"], name: "index_candidaturas_on_user_id"
   end
 
+  create_table "estagio_alunos", force: :cascade do |t|
+    t.integer "estagio_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estagio_id"], name: "index_estagio_alunos_on_estagio_id"
+    t.index ["user_id"], name: "index_estagio_alunos_on_user_id"
+  end
+
   create_table "estagios", force: :cascade do |t|
     t.date "data_inicio"
     t.date "data_termino"
     t.decimal "valor_bolsa"
-    t.integer "user_id", null: false
     t.integer "oferta_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["oferta_id"], name: "index_estagios_on_oferta_id"
-    t.index ["user_id"], name: "index_estagios_on_user_id"
   end
 
   create_table "habilidades", force: :cascade do |t|
@@ -112,7 +119,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_024559) do
   add_foreign_key "aluno_habilidades", "users"
   add_foreign_key "candidaturas", "oferta", column: "oferta_id"
   add_foreign_key "candidaturas", "users"
+  add_foreign_key "estagio_alunos", "estagios"
+  add_foreign_key "estagio_alunos", "users"
   add_foreign_key "estagios", "oferta", column: "oferta_id"
-  add_foreign_key "estagios", "users"
   add_foreign_key "ofertas", "users"
 end

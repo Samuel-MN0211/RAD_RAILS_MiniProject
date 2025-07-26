@@ -1,0 +1,30 @@
+<h3>Selecionar candidatos para estágio</h3>
+
+<%= form_with url: oferta_estagios_path(@oferta), method: :post do |f| %>
+  <div class="mb-3">
+    <% @candidatos.each do |candidato| %>
+      <div class="form-check">
+        <%= check_box_tag "alunos_ids[]", candidato.id, false, class: "form-check-input" %>
+        <%= label_tag "alunos_ids_#{candidato.id}", "#{candidato.nome} (#{candidato.email})", class: "form-check-label" %>
+      </div>
+    <% end %>
+  </div>
+
+  <hr>
+
+  <h5>Informações do estágio</h5>
+  <div class="mb-3">
+    <%= label_tag :data_inicio, "Data de Início" %>
+    <%= date_field_tag :data_inicio, nil, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= label_tag :data_termino, "Data de Término" %>
+    <%= date_field_tag :data_termino, nil, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= label_tag :valor_bolsa, "Valor da Bolsa (R$)" %>
+    <%= number_field_tag :valor_bolsa, nil, step: 0.01, class: "form-control" %>
+  </div>
+
+  <%= submit_tag "Confirmar Conversão", class: "btn btn-primary" %>
+<% end %>

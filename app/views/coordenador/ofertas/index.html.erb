@@ -31,7 +31,14 @@
     <div class="list-group-item">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1"><%= oferta.titulo %></h5>
-        <span class="badge <%= { proposta: 'bg-warning text-dark', aprovada: 'bg-success', reprovada: 'bg-danger', cancelada: 'bg-secondary', convertida: 'bg-info' }[oferta.status.to_sym] %>"><%= oferta.status.humanize %></span>
+        <span class="badge 
+          <%= { 
+            proposta: 'bg-warning text-dark',
+            aprovada: 'bg-success',
+            reprovada: 'bg-danger',
+            cancelada: 'bg-secondary',
+            convertida: 'bg-info' 
+            }[oferta.status.to_sym] %>"><%= oferta.status.humanize %></span>
       </div>
       <small>Empresa: <%= oferta.user.nome %></small>
     </div>

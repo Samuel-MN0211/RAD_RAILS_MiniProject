@@ -1,21 +1,23 @@
 Rails.application.routes.draw do
-  get "estagios/new"
-  get "estagios/create"
-  get "ofertas/index"
-  get "ofertas/new"
-  get "ofertas/create"
-  get "ofertas/show"
-  get "ofertas/edit"
-  get "ofertas/update"
-  get "ofertas/destroy"
-  
   devise_for :users, controllers: { registrations: "users/registrations" }
 
-  root "home#index"
+  devise_scope :user do
+    authenticated :user do
+      root to: 'dashboard#index', as: :authenticated_root
+    end
+
+    unauthenticated do
+      root to: 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
 
   resources :ofertas do
     resources :candidaturas, only: [:create]
-    resources :estagios, only: [:new, :create]
+    resources :estagios, only: [:index, :create] do
+      collection do
+        get :selecionar # Tela para selecionar candidatos
+      end
+    end
   end
 
   get 'dashboard', to: 'dashboard#index'

@@ -3,8 +3,14 @@ class OfertasController < ApplicationController
 
 
   def index
-    @ofertas_raw = Oferta.accessible_by(current_ability).order(created_at: :desc)
-    @pagy, @ofertas = pagy(@ofertas_raw)
+    base_scope = if current_user.aluno?
+      @ofertas = Oferta.where(status: :aprovada).order(created_at: :desc)
+    elsif current_user.empresa?
+      @ofertas = current_user.ofertas.order(created_at: :desc)
+    else
+      @ofertas = Oferta.all.order(created_at: :desc) # Para admins ou outros papéis
+    end
+    @pagy, @ofertas = pagy(base_scope.order(created_at: :desc))
   end
 
 

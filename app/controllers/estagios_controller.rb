@@ -1,24 +1,39 @@
 class EstagiosController < ApplicationController
   before_action :set_oferta
-  load_and_authorize_resource
+  before_action :authorize_create_estagio!, only: [:selecionar, :create]
 
-  # GET /ofertas/:oferta_id/estagios/new
-  def new
-    @aluno = User.find(params[:aluno_id])
-    @estagio = @oferta.build_estagio(user: @aluno)
+  def selecionar
+    @candidatos = @oferta.candidatos
   end
 
-  # POST /ofertas/:oferta_id/estagios
   def create
+    if (params[:alunos_ids].blank?)
+      flash.now[:alert] = "Selecione pelo menos um candidato."
+      @candidatos = @oferta.candidatos
+      return render :selecionar, status: :unprocessable_entity
+    end
+
+    if params[:data_inicio].blank? || params[:data_termino].blank? || params[:valor_bolsa].blank?
+      flash.now[:alert] = "Preencha todos os campos do estágio."
+      @candidatos = @oferta.candidatos
+      return render :selecionar, status: :unprocessable_entity
+    end
+
     @estagio = @oferta.build_estagio(estagio_params)
 
-    if @estagio.save
-      @oferta.update(status: :convertida)
-      redirect_to @oferta, notice: 'Oferta convertida em estágio com sucesso!'
-    else
-      @aluno = User.find(params[:estagio][:user_id])
-      render :new, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      @estagio.save!
+      params[:alunos_ids].each do |aluno_id|
+        @estagio.estagio_alunos.create!(user_id: aluno_id)
+      end
+      @oferta.update!(status: :convertida)
     end
+
+    redirect_to oferta_path(@oferta), notice: 'Oferta convertida em estágio com sucesso!'
+  rescue => e
+    flash.now[:alert] = "Erro: #{e.message}"
+    @candidatos = @oferta.candidatos
+    render :selecionar, status: :unprocessable_entity
   end
 
   private
@@ -27,8 +42,11 @@ class EstagiosController < ApplicationController
     @oferta = Oferta.find(params[:oferta_id])
   end
 
+  def authorize_create_estagio!
+    authorize! :create, Estagio.new(oferta: @oferta)
+  end
+
   def estagio_params
-    # Pega os dados do formulário e adiciona o user_id (aluno)
-    params.require(:estagio).permit(:data_inicio, :data_termino, :valor_bolsa).merge(user_id: params[:estagio][:user_id])
+    params.permit(:data_inicio, :data_termino, :valor_bolsa)
   end
 end

@@ -13,17 +13,16 @@ class Ability
 
 
     if user.aluno?
-      can :read, Oferta, status: :aprovada
+      can :read, Oferta, status: [ :aprovada, :convertida ]
       can :create, Candidatura, oferta: { status: :aprovada }
     end
-
+    
 
     if user.empresa?
-
       can :manage, Oferta, user_id: user.id
-
-
-      can :create, Estagio, oferta: { user_id: user.id, status: :aprovada }
+      can :create, Estagio do |estagio|
+        estagio.oferta.user_id == user.id && estagio.oferta.status == "aprovada"
+      end
     end
 
 

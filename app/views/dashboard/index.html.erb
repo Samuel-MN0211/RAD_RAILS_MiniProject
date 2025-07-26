@@ -7,8 +7,23 @@
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1"><%= link_to oferta.titulo, oferta_path(oferta) %></h5>
         <small>
-            <% if candidatura.status %>
-              <span class="badge bg-info"><%= candidatura.status.humanize %></span>
+            <% if oferta.status %>
+              <span class="badge 
+                <%= { 
+                  proposta: 'bg-warning text-dark',
+                  aprovada: 'bg-success',
+                  reprovada: 'bg-danger',
+                  cancelada: 'bg-secondary',
+                  convertida: 'bg-info' 
+                  }[oferta.status.to_sym] %>">
+                <%= {
+                  proposta: 'Proposta',
+                  aprovada: 'Em análise',
+                  reprovada: 'Cancelada',
+                  cancelada: 'Encerrada',
+                  convertida: 'Aprovado'
+                }[oferta.status.to_sym] %>
+              </span>
             <% else %>
               <span class="badge bg-dark">Indefinido</span>
             <% end %>

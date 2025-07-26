@@ -1,8 +1,39 @@
 <h1 class="display-5"><%= @oferta.titulo %></h1>
 <p class="text-muted">Proposta por: <%= @oferta.user.nome %></p>
-<span class="badge <%= { proposta: 'bg-warning text-dark', aprovada: 'bg-success', reprovada: 'bg-danger', cancelada: 'bg-secondary', convertida: 'bg-info' }[@oferta.status.to_sym] %>">
+
+<%#
+  Lógica abaixo para exibir toast diferente dependendo de se usuário é ALUNO
+  Poderia ser feito melhor? sim
+#%>
+<% if current_user.aluno? %>
+<span class="badge
+<%= { 
+  proposta: 'bg-warning text-dark',
+  aprovada: 'bg-success',
+  reprovada: 'bg-danger',
+  cancelada: 'bg-secondary',
+  convertida: 'bg-info' 
+  }[@oferta.status.to_sym] %>">
+  Status: <%= {
+                  proposta: 'Proposta',
+                  aprovada: 'Em análise',
+                  reprovada: 'Cancelada',
+                  cancelada: 'Encerrada',
+                  convertida: 'Aprovado'
+                }[@oferta.status.to_sym] %>
+</span>
+<% else %>
+<span class="badge
+<%= { 
+  proposta: 'bg-warning text-dark',
+  aprovada: 'bg-success',
+  reprovada: 'bg-danger',
+  cancelada: 'bg-secondary',
+  convertida: 'bg-info' 
+  }[@oferta.status.to_sym] %>">
   Status: <%= @oferta.status.humanize %>
 </span>
+<% end %>
 
 <div class="mt-4">
   <h4>Descrição</h4>
@@ -44,12 +75,13 @@
           <span>
             <strong><%= candidato.nome %></strong> (<%= candidato.email %>)
           </span>
-          <% if can? :create, Estagio %>
-            <%= link_to "Selecionar para Estágio", new_oferta_estagio_path(@oferta, aluno_id: candidato.id), class: "btn btn-primary btn-sm" %>
-          <% end %>
         </li>
       <% end %>
     </ul>
+    <br>
+      <% if can? :create, Estagio.new(oferta: @oferta) %>
+        <%= link_to "Selecionar candidatos", selecionar_oferta_estagios_path(@oferta), class: "btn btn-primary" %>
+      <% end %>
   <% else %>
     <p>Ainda não há candidatos para esta vaga.</p>
   <% end %>
