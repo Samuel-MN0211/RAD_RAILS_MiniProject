@@ -1,0 +1,35 @@
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg" style="width: 100%; max-width: 400px;">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">Entrar</h3>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="mb-3">
+          <%= f.label :email, "E-mail", class: "form-label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Digite seu e-mail" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "Senha", class: "form-label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "form-control", placeholder: "Digite sua senha" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="mb-3 form-check">
+            <%= f.check_box :remember_me, class: "form-check-input" %>
+            <%= f.label :remember_me, "Lembrar-me", class: "form-check-label" %>
+          </div>
+        <% end %>
+
+        <div class="d-grid">
+          <%= f.submit "Entrar", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <hr class="my-3">
+      <div class="text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="mt-3 text-center">
+  <% if controller_name != 'sessions' %>
+    <%= link_to "Login", new_session_path(resource_name), class: "d-block mb-2 text-decoration-none text-primary fw-bold" %>
+  <% end %>
+
+  <% if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to "Cadastro", new_registration_path(resource_name), class: "d-block mb-2 text-decoration-none text-primary fw-bold" %>
+  <% end %>
+</div>
