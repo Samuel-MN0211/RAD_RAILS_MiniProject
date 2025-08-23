@@ -19,6 +19,8 @@ gem "jbuilder"
 gem "cancancan"
 gem "pagy"
 gem "pry-rails"
+gem "faker"
+gem "cpf_faker"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

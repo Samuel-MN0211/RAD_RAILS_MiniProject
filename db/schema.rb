@@ -55,23 +55,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_152538) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "oferta", force: :cascade do |t|
-    t.string "titulo"
-    t.text "descricao"
-    t.string "atividade_principal"
-    t.integer "ch_semanal"
-    t.decimal "valor_pago"
-    t.decimal "vale_transporte"
-    t.text "pre_requisitos"
-    t.text "habilidades_necessarias"
-    t.text "habilidades_desejaveis"
-    t.integer "status"
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_oferta_on_user_id"
-  end
-
   create_table "ofertas", force: :cascade do |t|
     t.string "titulo"
     t.text "descricao"
@@ -117,11 +100,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_152538) do
 
   add_foreign_key "aluno_habilidades", "habilidades"
   add_foreign_key "aluno_habilidades", "users"
-  add_foreign_key "candidaturas", "oferta", column: "oferta_id"
+  add_foreign_key "candidaturas", "ofertas"
   add_foreign_key "candidaturas", "users"
   add_foreign_key "estagio_alunos", "estagios"
   add_foreign_key "estagio_alunos", "users"
-  add_foreign_key "estagios", "oferta", column: "oferta_id"
-  add_foreign_key "oferta", "users"
+  add_foreign_key "estagios", "ofertas"
   add_foreign_key "ofertas", "users"
 end

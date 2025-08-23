@@ -1,4 +1,5 @@
 class Oferta < ApplicationRecord
+  self.table_name = "ofertas"
   belongs_to :user 
 
   has_many :candidaturas, dependent: :destroy

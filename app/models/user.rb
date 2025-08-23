@@ -10,7 +10,8 @@ class User < ApplicationRecord
   has_many :habilidades, through: :aluno_habilidades
   has_many :candidaturas, dependent: :destroy
   has_many :ofertas_aplicadas, through: :candidaturas, source: :oferta
-  has_many :estagios, dependent: :destroy
+  has_many :estagio_alunos, dependent: :destroy
+  has_many :estagios, through: :estagio_alunos
 
   #VALIDAÇÕES GERAIS 
   validates :role, presence: true
